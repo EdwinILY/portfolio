@@ -1,11 +1,472 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BackendLens from '../components/BackendLens.astro';
+import FrontendLens from '../components/FrontendLens.astro';
+import SystemsLens from '../components/SystemsLens.astro';
 ---
 
 <Layout>
-	<Welcome />
+  <!-- High-Fidelity Cyber Splash Intro Screen -->
+  <div id="intro-splash-screen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-logo">
+        <span class="s-bracket">&lt;</span>
+        <span class="s-text">EDWIN_STACK</span>
+        <span class="s-bracket"> /&gt;</span>
+      </div>
+      <div class="splash-loader-bar">
+        <div class="splash-loader-fill"></div>
+      </div>
+      <div class="splash-status">LOADING COGNITIVE ARCHITECTURE...</div>
+    </div>
+  </div>
+
+  <!-- Floating Back to Portal Button (Visible only when not on main portal page) -->
+  <button id="floating-back-portal" class="floating-back-btn" title="Volver al Portal Principal" style="display: none; opacity: 0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="back-arrow-icon">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    <span>PORTAL</span>
+  </button>
+
+  <!-- Tri-Lens View Panels -->
+  <main class="portfolio-main">
+    
+    <!-- Backend Perspective container -->
+    <div class="lens-panel" id="panel-backend" style="display: none;">
+      <BackendLens />
+    </div>
+
+    <!-- Frontend Perspective container -->
+    <div class="lens-panel" id="panel-frontend" style="display: none;">
+      <FrontendLens />
+    </div>
+
+    <!-- Systems & DevOps Perspective container (Default view) -->
+    <div class="lens-panel active" id="panel-systems">
+      <SystemsLens />
+    </div>
+
+  </main>
+
+  <!-- High-fidelity client orchestration script -->
+  <script is:inline>
+    // -------------------------------------------------------------
+    // MASTER VIEW ORCHESTRATION (THE TRI-LENS CONTROLLER)
+    // -------------------------------------------------------------
+    const panels = document.querySelectorAll('.lens-panel');
+    const backBtn = document.getElementById('floating-back-portal');
+
+    // Define global switcher function accessible from any component
+    window.switchLens = function(selectedLens) {
+      if (!selectedLens) return;
+
+      // Update layout theme attribute
+      document.documentElement.setAttribute('data-theme', selectedLens);
+
+      // Handle visibility of floating back button
+      if (backBtn) {
+        if (selectedLens === 'systems') {
+          backBtn.style.opacity = '0';
+          setTimeout(() => {
+            if (document.documentElement.getAttribute('data-theme') === 'systems') {
+              backBtn.style.display = 'none';
+            }
+          }, 300);
+        } else {
+          backBtn.style.display = 'flex';
+          // Force reflow
+          backBtn.offsetHeight;
+          backBtn.style.opacity = '1';
+        }
+      }
+
+      // Cross-fade the panels with elegant CSS transitions
+      panels.forEach(panel => {
+        panel.classList.remove('active');
+        panel.style.opacity = '0';
+        setTimeout(() => {
+          if (!panel.classList.contains('active')) {
+            panel.style.display = 'none';
+          }
+        }, 300);
+      });
+
+      const activePanel = document.getElementById(`panel-${selectedLens}`);
+      if (activePanel) {
+        setTimeout(() => {
+          activePanel.style.display = 'block';
+          // Force layout recalculation
+          activePanel.offsetHeight; 
+          activePanel.classList.add('active');
+          activePanel.style.opacity = '1';
+          
+          // Trigger a custom event so that canvases in the newly active lens adjust their layouts
+          document.dispatchEvent(new CustomEvent('lens-changed', { detail: { lens: selectedLens } }));
+        }, 300);
+      }
+    };
+
+    // Click listener for floating back button
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        window.switchLens('systems');
+      });
+    }
+
+    // Initialize intro screen fade-out and settings on load
+    window.addEventListener('load', () => {
+      // Set systems active on load
+      document.documentElement.setAttribute('data-theme', 'systems');
+
+      // Fade out splash screen after progress completes
+      const splash = document.getElementById('intro-splash-screen');
+      if (splash) {
+        setTimeout(() => {
+          splash.classList.add('fade-out');
+          
+          // Fade and slide in the main layout smoothly
+          const mainLayout = document.querySelector('.portfolio-main');
+          if (mainLayout) {
+            mainLayout.classList.add('loaded');
+          }
+          
+          // Fully remove from layout flow after fade finishes
+          setTimeout(() => {
+            splash.style.display = 'none';
+          }, 800);
+        }, 1600); // 1.6s progress bar duration
+      }
+    });
+
+
+
+    // -------------------------------------------------------------
+    // FRONTEND: DESIGN SYSTEM DYNAMIC SANDBOX
+    // -------------------------------------------------------------
+    const sliderHue = document.getElementById('accent-hue');
+    const sliderRadius = document.getElementById('border-radius');
+    const sliderScale = document.getElementById('font-scale');
+
+    const valHue = document.getElementById('val-hue');
+    const valRadius = document.getElementById('val-radius');
+    const valScale = document.getElementById('val-scale');
+
+    const btnReset = document.getElementById('reset-sandbox');
+
+    function applySandboxValues() {
+      if (!sliderHue) return;
+      const hue = sliderHue.value;
+      const radius = sliderRadius.value;
+      const scale = sliderScale.value;
+
+      // Update text values
+      valHue.innerText = `${hue}°`;
+      valRadius.innerText = `${radius}px`;
+      valScale.innerText = `${scale}x`;
+
+      // Inject style updates directly into the document root custom variables!
+      document.documentElement.style.setProperty('--user-hue', `${hue}deg`);
+      document.documentElement.style.setProperty('--user-radius', `${radius}px`);
+      document.documentElement.style.setProperty('--user-scale', `${scale}`);
+
+      // We alter the primary color of frontend using hue shifts
+      document.documentElement.style.setProperty('--fe-primary', `hsl(${hue}, 100%, 50%)`);
+      document.documentElement.style.setProperty('--fe-secondary', `hsl(${calcSecondary(hue)}, 100%, 45%)`);
+    }
+
+    function calcSecondary(hue) {
+      return (parseInt(hue) + 60) % 360;
+    }
+
+    if (sliderHue) {
+      [sliderHue, sliderRadius, sliderScale].forEach(slider => {
+        slider.addEventListener('input', applySandboxValues);
+      });
+
+      btnReset.addEventListener('click', () => {
+        sliderHue.value = 0;
+        sliderRadius.value = 12;
+        sliderScale.value = 1.0;
+        applySandboxValues();
+        // Clear manual variables to let default stylesheets resume
+        document.documentElement.style.removeProperty('--user-hue');
+        document.documentElement.style.removeProperty('--user-radius');
+        document.documentElement.style.removeProperty('--user-scale');
+        document.documentElement.style.removeProperty('--fe-primary');
+        document.documentElement.style.removeProperty('--fe-secondary');
+      });
+    }
+
+
+    // -------------------------------------------------------------
+    // FRONTEND: MAGNETIC BUTTON MECHANIC
+    // -------------------------------------------------------------
+    const magBtn = document.getElementById('magnetic-btn');
+
+    if (magBtn) {
+      magBtn.addEventListener('mousemove', (e) => {
+        const rect = magBtn.getBoundingClientRect();
+        
+        // Calculate pointer coordinates relative to the button center
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        // Attract button by 35% of vector distance
+        magBtn.style.transform = `translate3d(${x * 0.35}px, ${y * 0.35}px, 0)`;
+        magBtn.style.boxShadow = `0 10px 25px rgba(255, 0, 122, 0.3)`;
+      });
+
+      magBtn.addEventListener('mouseleave', () => {
+        // Bounce back to center elastically
+        magBtn.style.transform = 'translate3d(0, 0, 0)';
+        magBtn.style.boxShadow = '0 4px 15px rgba(255, 0, 122, 0.2)';
+      });
+    }
+
+
+    // -------------------------------------------------------------
+    // FRONTEND: AUDIO PLAYER WIDGET PLAYBACK SIMULATION
+    // -------------------------------------------------------------
+    const audioPlayToggle = document.getElementById('audio-play-toggle');
+    const visualizerBars = document.getElementById('visualizer-bars');
+    const audioProgress = document.getElementById('audio-progress');
+
+    let audioInterval = null;
+    let isPlaying = false;
+    let progressVal = 35;
+
+    if (audioPlayToggle) {
+      audioPlayToggle.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        
+        if (isPlaying) {
+          visualizerBars.classList.add('playing');
+          audioPlayToggle.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          `;
+          
+          // Progress bar tracker
+          audioInterval = setInterval(() => {
+            progressVal += 0.5;
+            if (progressVal >= 100) progressVal = 0;
+            audioProgress.style.width = `${progressVal}%`;
+          }, 150);
+
+        } else {
+          visualizerBars.classList.remove('playing');
+          audioPlayToggle.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          `;
+          clearInterval(audioInterval);
+        }
+      });
+    }
+
+
+    // -------------------------------------------------------------
+    // FRONTEND: INTERACTIVE ACCORDIONS STACK
+    // -------------------------------------------------------------
+    const triggers = document.querySelectorAll('.accordion-trigger');
+    
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.parentElement;
+        const isActive = item.classList.contains('active');
+
+        // Close other panels
+        document.querySelectorAll('.accordion-item').forEach(i => {
+          i.classList.remove('active');
+        });
+
+        // Open hovered
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+  </script>
 </Layout>
+
+<style>
+  /* -------------------------------------------------------------
+     MAIN WRAPPER & TRANSITIONS
+     ------------------------------------------------------------- */
+  .portfolio-main {
+    min-height: 100vh;
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .portfolio-main.loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .lens-panel {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 100%;
+  }
+
+  /* Fade transitions between views */
+  .lens-panel {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .lens-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* -------------------------------------------------------------
+     CYBER SPLASH INTRO SCREEN
+     ------------------------------------------------------------- */
+  .splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #070B13; /* Deep systems black/navy */
+    z-index: 9999; /* Sits securely on top of everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .splash-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: 'Outfit', 'Inter', sans-serif;
+  }
+
+  .splash-logo {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+    text-shadow: 0 0 30px rgba(0, 136, 255, 0.3);
+  }
+
+  .s-bracket {
+    color: #0088FF;
+    font-weight: 500;
+  }
+
+  .splash-loader-bar {
+    width: 200px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .splash-loader-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #8B5CF6, #0088FF);
+    border-radius: 4px;
+    animation: fillLoader 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .splash-status {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    animation: pulseStatus 1s infinite alternate;
+  }
+
+  @keyframes fillLoader {
+    0% { width: 0; }
+    50% { width: 45%; }
+    100% { width: 100%; }
+  }
+
+  @keyframes pulseStatus {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  /* -------------------------------------------------------------
+     FLOATING BACK PORTAL BUTTON
+     ------------------------------------------------------------- */
+  .floating-back-btn {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    z-index: 999;
+    background: rgba(13, 20, 35, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.65rem 1.25rem;
+    border-radius: 30px;
+    color: var(--text-muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .floating-back-btn:hover {
+    color: #FFFFFF;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(0, 136, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  html[data-theme="backend"] .floating-back-btn:hover {
+    border-color: var(--be-primary);
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.25);
+  }
+
+  html[data-theme="frontend"] .floating-back-btn:hover {
+    border-color: var(--fe-primary);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+  }
+
+  .back-arrow-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .floating-back-btn:hover .back-arrow-icon {
+    transform: translateX(-3px);
+  }
+
+  @media (max-width: 600px) {
+    .floating-back-btn {
+      top: 1.25rem;
+      left: 1.25rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+</style>
