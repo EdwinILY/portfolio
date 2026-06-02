@@ -481,12 +481,12 @@ const contributions = Array(196).fill(0).map((_, i) => {
   .split-gateway-hero {
     position: relative;
     width: 100%;
-    height: calc(100vh - 4.5rem);
+    height: 100vh;
     display: flex;
     overflow: hidden;
     background: #03060b;
     border-bottom: 1px solid var(--border-color);
-    margin-top: 4.5rem; /* Margin to sit cleanly below Navbar */
+    margin-top: 0;
   }
 
   .portal-pane {
@@ -830,7 +830,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
       height: auto;
       min-height: 85vh;
       flex-direction: column;
-      margin-top: 7rem; /* Make more room for collapsed vertical navbar on mobile */
+      margin-top: 0;
     }
 
     .portal-pane {
