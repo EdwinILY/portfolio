@@ -481,7 +481,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
   .split-gateway-hero {
     position: relative;
     width: 100%;
-    height: 80vh;
+    height: calc(100vh - 4.5rem);
     display: flex;
     overflow: hidden;
     background: #03060b;
@@ -794,9 +794,19 @@ const contributions = Array(196).fill(0).map((_, i) => {
     width: 100%;
     margin: 0 auto;
     padding: 5rem 2rem 5rem;
-    display: flex;
+    display: none; /* Hidden by default */
     flex-direction: column;
     gap: 5rem;
+    scroll-margin-top: 5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .systems-content-wrapper.expanded {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @keyframes rotateRing {
@@ -1986,17 +1996,52 @@ const contributions = Array(196).fill(0).map((_, i) => {
       if (window.switchLens) window.switchLens('frontend');
     });
 
-    // Smoothly scroll to DevOps dashboard on center core click
+    // Toggle DevOps telemetry dashboard on center core click
     const centerCore = document.getElementById('portal-center-core');
     if (centerCore) {
       // Recreate to avoid duplicate event listeners if initialized multiple times
       const newCenterCore = centerCore.cloneNode(true);
       centerCore.parentNode.replaceChild(newCenterCore, centerCore);
+      
+      const scrollHintSpan = newCenterCore.querySelector('.core-scroll-hint span:first-child');
+      const scrollHintArrow = newCenterCore.querySelector('.core-scroll-hint .hint-arrow');
+      
       newCenterCore.addEventListener('click', (e) => {
         e.stopPropagation(); // Stop click propagation to portals
         const target = document.getElementById('devops-dashboard-wrapper');
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
+          const isHidden = target.style.display === 'none' || !target.classList.contains('expanded');
+          
+          if (isHidden) {
+            target.style.display = 'flex';
+            target.offsetHeight; // Force reflow
+            target.classList.add('expanded');
+            
+            // Update scroll hint text & arrow
+            if (scrollHintSpan) scrollHintSpan.textContent = 'CLOSE TELEMETRY';
+            if (scrollHintArrow) scrollHintArrow.textContent = '↑';
+            
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth' });
+              // Initialize canvas animations now that they are visible!
+              initTopologyCanvas();
+            }, 100);
+          } else {
+            target.classList.remove('expanded');
+            
+            // Update scroll hint text & arrow
+            if (scrollHintSpan) scrollHintSpan.textContent = 'EXPLOIT TELEMETRY';
+            if (scrollHintArrow) scrollHintArrow.textContent = '↓';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            setTimeout(() => {
+              // Only hide display if the user hasn't toggled it open again in the meantime
+              if (!target.classList.contains('expanded')) {
+                target.style.display = 'none';
+              }
+            }, 500); // Matches transition duration
+          }
         }
       });
     }
