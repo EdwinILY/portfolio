@@ -1,62 +1,5 @@
 ---
 // Frontend Lens Astro Component
-
-const codeHologram = `<span class="code-comment">// --- CRYSTALLINE HOLOGRAPHIC PRISM ---</span>
-<span class="code-keyword">const</span> geometry = <span class="code-keyword">new</span> THREE.<span class="code-function">OctahedronGeometry</span>(<span class="code-number">1.2</span>, <span class="code-number">0</span>);
-<span class="code-keyword">const</span> material = <span class="code-keyword">new</span> THREE.<span class="code-function">MeshPhongMaterial</span>({
-  <span class="code-property">color</span>: <span class="code-number">0x06030c</span>,
-  <span class="code-property">emissive</span>: <span class="code-number">0x110724</span>,
-  <span class="code-property">specular</span>: <span class="code-number">0x8B5CF6</span>,
-  <span class="code-property">flatShading</span>: <span class="code-keyword">true</span>
-});
-<span class="code-keyword">const</span> crystal = <span class="code-keyword">new</span> THREE.<span class="code-function">Mesh</span>(geometry, material);
-<span class="code-variable">scene</span>.<span class="code-function">add</span>(crystal);`;
-
-const codeDesignSystem = `<span class="code-comment">/* --- DESIGN SYSTEM variables --- */</span>
-<span class="code-keyword">:root</span> {
-  <span class="code-variable">--fe-primary</span>: <span class="code-string">hsl(0, 100%, 50%)</span>;
-  <span class="code-variable">--user-radius</span>: <span class="code-number">12px</span>;
-  <span class="code-variable">--user-scale</span>: <span class="code-number">1.0</span>;
-}
-
-<span class="code-keyword">.mock-widget</span> {
-  <span class="code-property">border-radius</span>: <span class="code-variable">var(--user-radius)</span>;
-  <span class="code-property">font-size</span>: <span class="code-function">calc</span>(<span class="code-number">1rem</span> * <span class="code-variable">var(--user-scale)</span>);
-  <span class="code-property">border</span>: <span class="code-number">1px</span> solid <span class="code-string">var(--fe-primary)</span>;
-}`;
-
-const codeMagnetic = `<span class="code-comment">// --- ELASTIC CURSOR ATTRACTION ---</span>
-<span class="code-keyword">const</span> magBtn = document.<span class="code-function">getElementById</span>(<span class="code-string">'magnetic-btn'</span>);
-
-magBtn.<span class="code-function">addEventListener</span>(<span class="code-string">'mousemove'</span>, (e) => {
-  <span class="code-keyword">const</span> rect = magBtn.<span class="code-function">getBoundingClientRect</span>();
-  <span class="code-keyword">const</span> x = e.clientX - rect.left - rect.width / 2;
-  <span class="code-keyword">const</span> y = e.clientY - rect.top - rect.height / 2;
-
-  <span class="code-comment">// Attract button by 35% of vector distance</span>
-  magBtn.style.transform = <span class="code-string">\`translate3d(\${x * 0.35}px, \${y * 0.35}px, 0)\`</span>;
-});`;
-
-const codeAudio = `<span class="code-comment">&lt;!-- --- GLASS AUDIO WIDGET --- --&gt;</span>
-<span class="code-keyword">&lt;div</span> <span class="code-variable">class</span>=<span class="code-string">"audio-player-card"</span><span class="code-keyword">&gt;</span>
-  <span class="code-keyword">&lt;div</span> <span class="code-variable">class</span>=<span class="code-string">"audio-visualizer"</span><span class="code-keyword">&gt;</span>
-    <span class="code-keyword">&lt;span</span> <span class="code-variable">class</span>=<span class="code-string">"bar"</span><span class="code-keyword">&gt;&lt;/span&gt;</span>
-  <span class="code-keyword">&lt;/div&gt;</span>
-  <span class="code-keyword">&lt;button</span> <span class="code-variable">id</span>=<span class="code-string">"audio-play-toggle"</span><span class="code-keyword">&gt;</span>Play<span class="code-keyword">&lt;/button&gt;</span>
-<span class="code-keyword">&lt;/div&gt;</span>`;
-
-const codeAccordion = `{
-  <span class="code-keyword">"accordionItems"</span>: [
-    {
-      <span class="code-variable">"title"</span>: <span class="code-string">"Optimized Rendering Flow"</span>,
-      <span class="code-variable">"content"</span>: <span class="code-string">"Uses GPU-accelerated translate3d composites..."</span>
-    },
-    {
-      <span class="code-variable">"title"</span>: <span class="code-string">"TypeScript Safety Net"</span>,
-      <span class="code-variable">"content"</span>: <span class="code-string">"Strict structural typing rules..."</span>
-    }
-  ]
-}`;
 ---
 
 <!-- Import Three.js CDN Library at the top of the frontend component -->
@@ -84,41 +27,79 @@ const codeAccordion = `{
             <span class="file-icon hologram">💎</span>
             <span class="file-name">prism.three</span>
           </li>
-          <li class="tree-item" data-file="design-system">
-            <span class="file-icon accent">🎨</span>
-            <span class="file-name">index.css</span>
-          </li>
-          <li class="tree-item" data-file="magnetic">
-            <span class="file-icon magnetic">🧲</span>
-            <span class="file-name">magnetic.ts</span>
-          </li>
           <li class="tree-item" data-file="audio">
             <span class="file-icon audio">🎵</span>
             <span class="file-name">player.html</span>
           </li>
-          <li class="tree-item" data-file="accordion">
-            <span class="file-icon accordion">📁</span>
-            <span class="file-name">accordions.json</span>
+          <li class="tree-item" data-file="lupino">
+            <span class="file-icon lupino">🗺️</span>
+            <span class="file-name">lupino.html</span>
           </li>
         </ul>
       </aside>
 
-      <!-- Code Editor Pane -->
+      <!-- Project Information / Control Panel Pane -->
       <div class="workbench-editor">
         <div class="editor-tabs">
           <div class="editor-tab active" id="active-tab-title">prism.three</div>
         </div>
         
-        <!-- Code Content Areas (hidden/shown based on selected file) -->
-        <pre class="code-viewport" id="code-hologram"><code set:html={codeHologram}></code></pre>
+        <!-- Info Content Areas (hidden/shown based on selected file) -->
+        <div class="code-viewport" id="code-hologram">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">💎 WEBGL & REAL-TIME AUDIO API</span>
+              <h3>Visor Holográfico Prism</h3>
+            </div>
+            <p class="project-info-desc">
+              Un visor interactivo tridimensional de alto rendimiento que integra gráficos GPU acelerados con Three.js y captura de frecuencias de sonido mediante la Web Audio API. Analiza las vibraciones acústicas del ordenador y las traduce en latidos elásticos, pulsaciones cromáticas y órbitas dinámicas de partículas en tiempo real.
+            </p>
+            
+            <div class="project-info-controls">
+              <div class="control-item">
+                <div class="control-header">
+                  <label for="audio-sensitivity-slider">Sensibilidad del Umbral (Gain)</label>
+                  <span class="control-val" id="val-sensitivity">1.4x</span>
+                </div>
+                <input type="range" id="audio-sensitivity-slider" min="0.5" max="3.0" step="0.1" value="1.4" class="fe-slider" />
+                <span class="slider-helper">Desliza para ajustar la ganancia y adaptar la respuesta de las pulsaciones del cristal a la intensidad del sonido.</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <pre class="code-viewport" id="code-design-system" style="display:none;"><code set:html={codeDesignSystem}></code></pre>
+        <div class="code-viewport" id="code-audio" style="display:none;">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">🎵 AUDIO VISUALIZER GRAPHICS</span>
+              <h3>Reproductor Glassmorphic</h3>
+            </div>
+            <p class="project-info-desc">
+              Un widget de reproducción de audio digital estructurado con diseño de interfaz translúcida (Glassmorphism). Dispone de un ecualizador de frecuencias de 7 bandas interactivo, el cual simula una reproducción acústica mediante animaciones o interactúa directamente con la Web Audio API cuando el ecualizador real está encendido.
+            </p>
+          </div>
+        </div>
 
-        <pre class="code-viewport" id="code-magnetic" style="display:none;"><code set:html={codeMagnetic}></code></pre>
-
-        <pre class="code-viewport" id="code-audio" style="display:none;"><code set:html={codeAudio}></code></pre>
-
-        <pre class="code-viewport" id="code-accordion" style="display:none;"><code set:html={codeAccordion}></code></pre>
+        <div class="code-viewport" id="code-lupino" style="display:none;">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">🗺️ GEOLOCATION & GASTROMAP</span>
+              <h3>Lupino de Altura</h3>
+            </div>
+            <p class="project-info-desc">
+              Una single-page application diseñada para una ruta turística y gastronómica. Incorpora un mapa interactivo detallado que geolocaliza y describe visualmente todos los puntos de interés, platillos tradicionales y paradas sugeridas propuestos por estudiantes de gastronomía para esta ruta única.
+            </p>
+            <div class="project-info-controls">
+              <a href="https://landingpage-lupino.vercel.app" target="_blank" rel="noopener noreferrer" class="visit-site-btn">
+                <span>Visitar Sitio Web</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow-icon">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Live Render Preview Pane -->
@@ -139,68 +120,10 @@ const codeAccordion = `{
           </div>
         </div>
 
-        <!-- Content 1: Design System Sandbox -->
-        <div class="preview-container" id="preview-design-system" style="display:none;">
-          <div class="sandbox-inner">
-            <div class="sandbox-sliders">
-              <div class="control-item">
-                <div class="control-header">
-                  <label for="accent-hue">Primary Color Hue</label>
-                  <span class="control-val" id="val-hue">0°</span>
-                </div>
-                <input type="range" id="accent-hue" min="0" max="360" value="0" class="fe-slider" />
-              </div>
-
-              <div class="control-item">
-                <div class="control-header">
-                  <label for="border-radius">Interface Border Radius</label>
-                  <span class="control-val" id="val-radius">12px</span>
-                </div>
-                <input type="range" id="border-radius" min="0" max="36" value="12" class="fe-slider" />
-              </div>
-
-              <div class="control-item">
-                <div class="control-header">
-                  <label for="font-scale">Global Font Scale</label>
-                  <span class="control-val" id="val-scale">1.0x</span>
-                </div>
-                <input type="range" id="font-scale" min="0.8" max="1.3" step="0.05" value="1.0" class="fe-slider" />
-              </div>
-              
-              <button class="reset-btn" id="reset-sandbox">Reset Canvas</button>
-            </div>
-
-            <!-- Preview Card -->
-            <div class="mock-widget">
-              <div class="mock-badge">ACTIVE PREVIEW</div>
-              <h4>Interactive Card Design</h4>
-              <p>This panel adapts organically to your adjustments. The border rounding, typography scaling, and accent colors change globally across the DOM.</p>
-              <div class="mock-footer">
-                <span>Edwin Ily</span>
-                <span>May 2026</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Content 2: Magnetic Button Sandbox -->
-        <div class="preview-container" id="preview-magnetic" style="display:none;">
-          <div class="sandbox-inner center-content">
-            <div class="widget-meta">EXPERIMENT #01</div>
-            <h3>Magnetic Attraction</h3>
-            <p class="widget-desc">This button attracts itself to your cursor coordinates. Hover and move close to feel the elastic spring tension.</p>
-            <div class="widget-action-box">
-              <button class="magnetic-btn" id="magnetic-btn">
-                <span class="magnetic-text">Attract Cursor</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Content 3: Audio Player Sandbox -->
+        <!-- Content 1: Audio Player Sandbox -->
         <div class="preview-container" id="preview-audio" style="display:none;">
           <div class="sandbox-inner center-content">
-            <div class="widget-meta">EXPERIMENT #02</div>
+            <div class="widget-meta">EXPERIMENT #01</div>
             <h3>Glass Audio Player</h3>
             <p class="widget-desc">Frosted UI containing dynamic visualizers. Click to simulate active track playback.</p>
             
@@ -238,34 +161,11 @@ const codeAccordion = `{
           </div>
         </div>
 
-        <!-- Content 4: Accordion Sandbox -->
-        <div class="preview-container" id="preview-accordion" style="display:none;">
-          <div class="sandbox-inner">
-            <div class="widget-meta">EXPERIMENT #03</div>
-            <h3>Elastic Accordion</h3>
-            <p class="widget-desc">A grid structure testing fluid CSS height calculation and spring transition-timing functions.</p>
-            
-            <div class="accordion-group">
-              <div class="accordion-item">
-                <button class="accordion-trigger" data-acc="1">
-                  <span>Optimized Rendering Flow</span>
-                  <span class="acc-chevron">▼</span>
-                </button>
-                <div class="accordion-panel" id="acc-panel-1">
-                  <p>Uses GPU-accelerated translate3d composites and critical CSS paths to ensure 60fps renders on low-end mobile devices.</p>
-                </div>
-              </div>
-
-              <div class="accordion-item">
-                <button class="accordion-trigger" data-acc="2">
-                  <span>TypeScript Safety Net</span>
-                  <span class="acc-chevron">▼</span>
-                </button>
-                <div class="accordion-panel" id="acc-panel-2">
-                  <p>Strict structural typing rules combined with compile-time schemas to guarantee component prop validity and avoid runtime regressions.</p>
-                </div>
-              </div>
-            </div>
+        <!-- Content 2: Lupino de Altura Live Map Site Preview -->
+        <div class="preview-container" id="preview-lupino" style="display:none;">
+          <div class="sandbox-inner" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="widget-meta">EXPERIMENT #02 // LIVE SITE PREVIEW</div>
+            <iframe src="https://landingpage-lupino.vercel.app" class="lupino-iframe" title="Lupino de Altura Live Site"></iframe>
           </div>
         </div>
       </section>
@@ -279,7 +179,7 @@ const codeAccordion = `{
      ------------------------------------------------------------- */
   .frontend-lens-root {
     padding: 5rem 2rem 1.5rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
@@ -1046,6 +946,106 @@ const codeAccordion = `{
     border-radius: var(--user-radius);
     box-shadow: inset 0 0 45px rgba(139, 92, 246, 0.06), 0 10px 30px rgba(0, 0, 0, 0.2);
   }
+
+  /* Project Information Pane Styles */
+  .project-info-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--text-color);
+  }
+
+  .project-info-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .info-badge {
+    align-self: flex-start;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.05em;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .project-info-pane h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+
+  .project-info-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .project-info-controls {
+    border-top: 1px dashed var(--border-color);
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .slider-helper {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* Lupino de Altura Project Styles */
+  .visit-site-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-color);
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--user-radius);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--fe-font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .visit-site-btn:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4), 0 0 10px rgba(139, 92, 246, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-arrow-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .visit-site-btn:hover .btn-arrow-icon {
+    transform: translate(2px, -2px);
+  }
+
+  .lupino-iframe {
+    width: 100%;
+    flex: 1;
+    min-height: 480px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    background: rgba(6, 3, 13, 0.4);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
 </style>
 
 <script is:inline>
@@ -1053,11 +1053,13 @@ const codeAccordion = `{
   // THREE.JS HOLOGRAPHIC CRYSTAL PRISM VIEWPORT
   // -------------------------------------------------------------
   let threeAnimationId = null;
+  let activeRenderer = null; // Save reference to dispose of webgl context
   let audioCtx = null;
   let analyser = null;
   let audioStream = null;
   let dataArray = null;
   let isAudioSyncActive = false;
+  window.audioSensitivity = 1.4; // Global sensitivity threshold
 
   // Real-time audio sync helpers
   async function startAudioSync(syncBtn) {
@@ -1141,6 +1143,16 @@ const codeAccordion = `{
       threeAnimationId = null;
     }
     
+    // Dispose of previous renderer to prevent WebGL context leaks
+    if (activeRenderer) {
+      try {
+        activeRenderer.dispose();
+      } catch (e) {
+        console.error("Error disposing renderer:", e);
+      }
+      activeRenderer = null;
+    }
+    
     const canvas = document.getElementById('three-playground-canvas');
     if (!canvas || !window.THREE) return;
     
@@ -1158,6 +1170,7 @@ const codeAccordion = `{
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
+    activeRenderer = renderer; // Save reference
     
     // Camera Setup
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
@@ -1298,6 +1311,20 @@ const codeAccordion = `{
         }
       };
     }
+
+    // Setup Sensitivity Threshold Slider
+    const sensSlider = document.getElementById('audio-sensitivity-slider');
+    const sensValLabel = document.getElementById('val-sensitivity');
+    if (sensSlider) {
+      sensSlider.value = window.audioSensitivity;
+      if (sensValLabel) sensValLabel.textContent = `${window.audioSensitivity.toFixed(1)}x`;
+
+      sensSlider.oninput = () => {
+        const val = parseFloat(sensSlider.value);
+        window.audioSensitivity = val;
+        if (sensValLabel) sensValLabel.textContent = `${val.toFixed(1)}x`;
+      };
+    }
     
     const clock = new THREE.Clock();
     
@@ -1343,8 +1370,8 @@ const codeAccordion = `{
         const avgBass = bass / bassCount;
         const avgTreble = treble / (trebleEnd - trebleStart + 1);
 
-        // Boost sensitivity so it reacts strongly to normal/quiet music
-        const sensitivity = 1.4; 
+        // Boost sensitivity dynamically set by the manual slider threshold
+        const sensitivity = window.audioSensitivity; 
         audioIntensity = Math.min(1.0, (avg / 255.0) * sensitivity);
         bassIntensity = Math.min(1.0, (avgBass / 255.0) * sensitivity);
         trebleIntensity = Math.min(1.0, (avgTreble / 255.0) * sensitivity);
@@ -1364,8 +1391,8 @@ const codeAccordion = `{
               for (let j = start; j < start + step; j++) {
                 bandSum += dataArray[j];
               }
-              const bandAvg = bandSum / step;
-              const barHeight = Math.max(3, Math.min(1.0, (bandAvg / 255.0) * sensitivity) * 22);
+              const stepAvg = bandSum / step;
+              const barHeight = Math.max(3, Math.min(1.0, (stepAvg / 255.0) * sensitivity) * 22);
               bars[b].style.height = `${barHeight}px`;
               bars[b].style.animation = 'none';
             }
@@ -1442,13 +1469,15 @@ const codeAccordion = `{
     
     const fileCodes = {
       'hologram': 'prism.three',
-      'design-system': 'index.css',
-      'magnetic': 'magnetic.ts',
       'audio': 'player.html',
-      'accordion': 'accordions.json'
+      'lupino': 'lupino.html'
     };
 
     treeItems.forEach(item => {
+      // Guard to prevent multiple bindings to the same items
+      if (item.getAttribute('data-tabs-bound')) return;
+      item.setAttribute('data-tabs-bound', 'true');
+
       item.addEventListener('click', () => {
         const targetFile = item.getAttribute('data-file');
         
@@ -1476,8 +1505,13 @@ const codeAccordion = `{
         const previewElem = document.getElementById(`preview-${targetFile}`);
         if (previewElem) {
           previewElem.style.display = 'block';
-          previewElem.offsetHeight;
+          previewElem.offsetHeight; // Force reflow
           previewElem.classList.add('active');
+        }
+
+        // Auto restart/re-init Three.js when switching back to the hologram tab
+        if (targetFile === 'hologram') {
+          initThreePlayground();
         }
       });
     });
@@ -1498,9 +1532,13 @@ const codeAccordion = `{
       }
     } else if (e.detail && e.detail.lens === 'frontend') {
       setTimeout(() => {
-        initThreePlayground();
+        // Only initialize Three if hologram (prism.three) is the active tab
+        const hologramTab = document.querySelector('.tree-item[data-file="hologram"]');
+        if (hologramTab && hologramTab.classList.contains('active')) {
+          initThreePlayground();
+        }
         initWorkbenchTabs();
-      }, 320);
+      }, 100);
     }
   });
 </script>
