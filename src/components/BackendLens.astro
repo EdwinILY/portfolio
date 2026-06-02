@@ -50,14 +50,15 @@
      BACKEND PERSPECTIVE BASE - FULLY CENTERED
      ------------------------------------------------------------- */
   .backend-lens-root {
-    padding: 7rem 2rem 5rem;
+    padding: 5rem 2rem 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
-    min-height: calc(100vh - 100px);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
     font-family: 'JetBrains Mono', 'Courier New', Courier, monospace !important;
   }
 
@@ -91,7 +92,9 @@
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(0, 245, 160, 0.03);
     display: flex;
     flex-direction: column;
-    height: 750px;
+    height: 72vh; /* Responsive height depending on screen size */
+    min-height: 480px;
+    max-height: 850px;
     position: relative;
     z-index: 11; /* Sits securely inside the terminal-section stack */
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
