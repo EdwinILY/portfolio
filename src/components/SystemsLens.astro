@@ -84,7 +84,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
     <div class="meta-label">⚡ LIVE DEVOPS OPERATIONS CENTER</div>
     <h1 class="sys-title">Systems Profile // EdwinILY</h1>
 
-    <!-- 2-Column Dashboard Centerpiece -->
+    <!-- 1-Column Dashboard Centerpiece -->
     <div class="ops-dashboard-grid">
       <!-- Column 1: GitHub Card & Real Bio -->
       <div class="ops-card bio-profile-card">
@@ -137,27 +137,6 @@ const contributions = Array(196).fill(0).map((_, i) => {
                 title={`${day.commitCount} commits el ${day.dateString}`}
               ></div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Column 2: Live Cluster Map Topology (Highly Interactive Canvas) -->
-      <div class="ops-card topology-card">
-        <div class="card-glow-overlay"></div>
-        <div class="topology-header">
-          <span class="top-status-indicator">● OPERATIONAL</span>
-          <span class="top-title">KUBERNETES TOPOLOGY // LIVE NET</span>
-        </div>
-        <div class="canvas-container">
-          <canvas id="cluster-topology-canvas"></canvas>
-          
-          <!-- Popover Status Card -->
-          <div class="topology-popover" id="top-popover">
-            <div class="pop-header">SERVICE TELEMETRY</div>
-            <h4 class="pop-title" id="pop-node-name">Ingress Gateway</h4>
-            <div class="pop-metric"><span class="m-label">Health:</span> <span class="m-val green">100%</span></div>
-            <div class="pop-metric"><span class="m-label">CPU:</span> <span class="m-val" id="pop-node-cpu">12%</span></div>
-            <div class="pop-metric"><span class="m-label">Memory:</span> <span class="m-val" id="pop-node-mem">45 MB</span></div>
           </div>
         </div>
       </div>
@@ -428,39 +407,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
     <p class="sys-section-desc">Connect directly via secure developer hubs. Bypass emails and communicate natively on-chain or on social nodes.</p>
 
     <div class="contact-grid">
-      <!-- Left side: Interactive SSH Terminal access -->
-      <div class="ssh-terminal-card">
-        <div class="terminal-card-header">
-          <div class="term-dots">
-            <span class="t-dot red"></span>
-            <span class="t-dot yellow"></span>
-            <span class="t-dot green"></span>
-          </div>
-          <span class="term-title">visitor@edwin-portfolio:~</span>
-        </div>
-        <div class="terminal-card-body">
-          <p class="term-info-text">// Establish direct secure terminal socket access</p>
-          <div class="ssh-command-box" id="ssh-box" title="Click to copy SSH command">
-            <span class="ssh-prompt">$</span>
-            <span class="ssh-code">ssh visitor@portfolio.edwin.dev</span>
-            <button class="ssh-copy-icon" aria-label="Copy SSH command">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-            </button>
-          </div>
-          <p class="term-notes">Click to copy command. SSH portal provisioned elastically via cloud clusters.</p>
-          
-          <!-- Success clipboard alert -->
-          <div class="copy-alert" id="copy-alert">
-            <span class="alert-indicator">●</span>
-            <span class="alert-msg">SSH command copied to clipboard!</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right side: Social Nodes Directory -->
+      <!-- Social Nodes Directory -->
       <div class="social-nodes-deck">
         <!-- Node 1: GitHub -->
         <a href="https://github.com/EdwinILY" target="_blank" rel="noopener noreferrer" class="social-node-card">
@@ -942,7 +889,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
      ------------------------------------------------------------- */
   .ops-dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-top: 1.5rem;
   }
@@ -1452,7 +1399,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
 
   .contact-grid {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr;
     gap: 3.5rem;
   }
 
@@ -1598,9 +1545,9 @@ const contributions = Array(196).fill(0).map((_, i) => {
 
   /* Right Side: Interactive Social Nodes Directory */
   .social-nodes-deck {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 
   .social-node-card {
@@ -1699,6 +1646,10 @@ const contributions = Array(196).fill(0).map((_, i) => {
   }
 
   @media (max-width: 768px) {
+    .social-nodes-deck {
+      grid-template-columns: 1fr;
+    }
+
     .sys-title {
       font-size: 2.5rem;
     }

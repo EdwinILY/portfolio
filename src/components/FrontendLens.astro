@@ -66,6 +66,10 @@ const codeAccordion = `{
     <div class="frontend-3d-viewport" title="Click to pulse the holographic crystal">
       <div class="threejs-glow-effect"></div>
       <div class="prism-overlay-label">REFRACTIVE KINETIC PRISM</div>
+      <button id="three-audio-sync-btn" class="three-audio-sync-btn" title="Sincronizar con la música del ordenador">
+        <span class="sync-dot"></span>
+        <span class="sync-text">🎤 Sincronizar Música</span>
+      </button>
       <canvas id="three-playground-canvas" class="three-canvas"></canvas>
     </div>
   </section>
@@ -342,6 +346,62 @@ const codeAccordion = `{
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     border: 1px solid var(--border-color);
+  }
+
+  /* Audio Sync Glassmorphic Button Overlay */
+  .three-audio-sync-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(6, 3, 13, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--text-color);
+    font-family: var(--fe-font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .three-audio-sync-btn:hover {
+    border-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+  }
+
+  .three-audio-sync-btn.active {
+    border-color: #FF007A;
+    background: rgba(255, 0, 122, 0.15);
+    box-shadow: 0 0 15px rgba(255, 0, 122, 0.4);
+    color: #FFFFFF;
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--text-muted);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+
+  .three-audio-sync-btn.active .sync-dot {
+    background-color: #FF007A;
+    animation: syncDotPulse 1.2s infinite alternate;
+  }
+
+  @keyframes syncDotPulse {
+    0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0 rgba(255, 0, 122, 0); }
+    100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 8px rgba(255, 0, 122, 1); }
   }
 
   .fe-title {
@@ -962,6 +1022,86 @@ const codeAccordion = `{
   // THREE.JS HOLOGRAPHIC CRYSTAL PRISM VIEWPORT
   // -------------------------------------------------------------
   let threeAnimationId = null;
+  let audioCtx = null;
+  let analyser = null;
+  let audioStream = null;
+  let dataArray = null;
+  let isAudioSyncActive = false;
+
+  // Real-time audio sync helpers
+  async function startAudioSync(syncBtn) {
+    try {
+      audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 128; // Optimized for performance and 7 visualizer bars
+      
+      const source = audioCtx.createMediaStreamSource(audioStream);
+      source.connect(analyser);
+      
+      isAudioSyncActive = true;
+      if (syncBtn) {
+        syncBtn.classList.add('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🔊 Música Activa';
+      }
+
+      // Also dynamically update simulated widget details
+      const trackTitle = document.querySelector('#preview-audio .track-title');
+      const trackArtist = document.querySelector('#preview-audio .track-artist');
+      const audioArt = document.querySelector('#preview-audio .audio-art');
+      if (trackTitle) trackTitle.textContent = 'Mic / System Audio';
+      if (trackArtist) trackArtist.textContent = 'Real-time Music Input';
+      if (audioArt) audioArt.textContent = '🎤';
+    } catch (err) {
+      console.error("Error accessing microphone:", err);
+      alert("Para sincronizar la música con el cristal 3D, activa el acceso al micrófono. Si quieres capturar el sonido del sistema directamente, puedes configurar Stereo Mix / Mezcla Estéreo como tu dispositivo de entrada predeterminado.");
+      isAudioSyncActive = false;
+      if (syncBtn) {
+        syncBtn.classList.remove('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+      }
+    }
+  }
+
+  window.stopAudioSync = function() {
+    isAudioSyncActive = false;
+    if (audioStream) {
+      audioStream.getTracks().forEach(track => track.stop());
+      audioStream = null;
+    }
+    if (audioCtx) {
+      audioCtx.close();
+      audioCtx = null;
+    }
+    analyser = null;
+    dataArray = null;
+
+    const syncBtn = document.getElementById('three-audio-sync-btn');
+    if (syncBtn) {
+      syncBtn.classList.remove('active');
+      const syncText = syncBtn.querySelector('.sync-text');
+      if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+    }
+
+    const visualizerBars = document.getElementById('visualizer-bars');
+    if (visualizerBars) {
+      visualizerBars.classList.remove('playing');
+      const bars = visualizerBars.querySelectorAll('.bar');
+      bars.forEach(bar => {
+        bar.style.height = '';
+        bar.style.animation = '';
+      });
+    }
+
+    const trackTitle = document.querySelector('#preview-audio .track-title');
+    const trackArtist = document.querySelector('#preview-audio .track-artist');
+    const audioArt = document.querySelector('#preview-audio .audio-art');
+    if (trackTitle) trackTitle.textContent = 'Creative Coding.mp3';
+    if (trackArtist) trackArtist.textContent = 'Astro Beats Subsystem';
+    if (audioArt) audioArt.textContent = '🎵';
+  };
 
   function initThreePlayground() {
     if (threeAnimationId) {
@@ -1103,6 +1243,29 @@ const codeAccordion = `{
       ringMesh1.rotation.z += 1.5;
       ringMesh2.rotation.z -= 1.5;
     });
+
+    // Setup Audio Sync Button Event
+    const syncBtn = document.getElementById('three-audio-sync-btn');
+    if (syncBtn) {
+      if (isAudioSyncActive) {
+        syncBtn.classList.add('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🔊 Música Activa';
+      } else {
+        syncBtn.classList.remove('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+      }
+
+      syncBtn.onclick = async (e) => {
+        e.stopPropagation();
+        if (isAudioSyncActive) {
+          window.stopAudioSync();
+        } else {
+          await startAudioSync(syncBtn);
+        }
+      };
+    }
     
     const clock = new THREE.Clock();
     
@@ -1114,6 +1277,67 @@ const codeAccordion = `{
       }
       
       const time = clock.getElapsedTime();
+
+      // Real-time audio analysis values
+      let audioIntensity = 0;
+      let bassIntensity = 0;
+      let trebleIntensity = 0;
+
+      if (isAudioSyncActive && analyser) {
+        const bufferLength = analyser.frequencyBinCount;
+        if (!dataArray || dataArray.length !== bufferLength) {
+          dataArray = new Uint8Array(bufferLength);
+        }
+        analyser.getByteFrequencyData(dataArray);
+
+        let total = 0;
+        let bass = 0;
+        let treble = 0;
+        const bassCount = Math.min(6, bufferLength);
+        const trebleStart = Math.floor(bufferLength * 0.4);
+        const trebleEnd = Math.floor(bufferLength * 0.8);
+
+        for (let i = 0; i < bufferLength; i++) {
+          total += dataArray[i];
+          if (i < bassCount) {
+            bass += dataArray[i];
+          }
+          if (i >= trebleStart && i <= trebleEnd) {
+            treble += dataArray[i];
+          }
+        }
+
+        const avg = total / bufferLength;
+        const avgBass = bass / bassCount;
+        const avgTreble = treble / (trebleEnd - trebleStart + 1);
+
+        audioIntensity = avg / 255.0;
+        bassIntensity = avgBass / 255.0;
+        trebleIntensity = avgTreble / 255.0;
+
+        // Update visualizer bars in Workbench preview
+        const visualizerBars = document.getElementById('visualizer-bars');
+        if (visualizerBars) {
+          const bars = visualizerBars.querySelectorAll('.bar');
+          if (bars.length > 0) {
+            if (!visualizerBars.classList.contains('playing')) {
+              visualizerBars.classList.add('playing');
+            }
+            const step = Math.floor(bufferLength / bars.length);
+            for (let b = 0; b < bars.length; b++) {
+              let bandSum = 0;
+              const start = b * step;
+              for (let j = start; j < start + step; j++) {
+                bandSum += dataArray[j];
+              }
+              const bandAvg = bandSum / step;
+              const barHeight = Math.max(3, (bandAvg / 255.0) * 22);
+              bars[b].style.height = `${barHeight}px`;
+              bars[b].style.animation = 'none';
+            }
+          }
+        }
+      }
       
       // Apply spring easing to click kinetic pulse
       const springTension = 0.15;
@@ -1123,10 +1347,16 @@ const codeAccordion = `{
       pulseVelocity += springForce;
       pulseVelocity *= springFriction;
       pulseScale += pulseVelocity;
+
+      // Add real-time music pulse scale component
+      const audioScaleBase = 1.0 + bassIntensity * 0.55;
+      const finalCrystalScale = Math.max(pulseScale, audioScaleBase);
       
-      // Gradually decay point light flashes
-      pointLight1.intensity += (4.0 - pointLight1.intensity) * 0.1;
-      pointLight2.intensity += (3.0 - pointLight2.intensity) * 0.1;
+      // Interpolate light intensities nicely incorporating click + music beats
+      const targetLight1 = 4.0 + bassIntensity * 12.0;
+      const targetLight2 = 3.0 + trebleIntensity * 8.0;
+      pointLight1.intensity += (targetLight1 - pointLight1.intensity) * 0.2;
+      pointLight2.intensity += (targetLight2 - pointLight2.intensity) * 0.2;
       
       // Apply parallax coordinates
       mouseX += (targetX - mouseX) * 0.08;
@@ -1135,23 +1365,30 @@ const codeAccordion = `{
       // Crystal slow spinning + cursor focus tracking
       crystalMesh.rotation.y = time * 0.15 + mouseX * 0.4;
       crystalMesh.rotation.x = time * 0.1 + mouseY * 0.4;
-      crystalMesh.scale.setScalar(pulseScale);
+      crystalMesh.scale.setScalar(finalCrystalScale);
       
-      // Orbiting rings animation
-      ringMesh1.rotation.x = (time * 0.3) + mouseX * 0.6;
-      ringMesh1.rotation.y = (-time * 0.15) + mouseY * 0.3;
-      
-      ringMesh2.rotation.y = (-time * 0.25) - mouseX * 0.5;
-      ringMesh2.rotation.z = (time * 0.2) + mouseY * 0.5;
+      // Orbiting rings animation speed up dynamically with audio intensity
+      const ringSpeed1 = 0.3 * (1.0 + audioIntensity * 2.5);
+      const ringSpeed2 = 0.15 * (1.0 + audioIntensity * 2.0);
+      const ringSpeed3 = 0.25 * (1.0 + audioIntensity * 2.5);
+      const ringSpeed4 = 0.2 * (1.0 + audioIntensity * 2.0);
 
-      // Animate particles in wave paths
+      ringMesh1.rotation.x = (time * ringSpeed1) + mouseX * 0.6;
+      ringMesh1.rotation.y = (-time * ringSpeed2) + mouseY * 0.3;
+      
+      ringMesh2.rotation.y = (-time * ringSpeed3) - mouseX * 0.5;
+      ringMesh2.rotation.z = (time * ringSpeed4) + mouseY * 0.5;
+
+      // Animate particles with expansion + speed up driven by audio
       const pPositions = pGeo.attributes.position.array;
       for (let i = 0; i < particleCount; i++) {
         const data = pData[i];
-        data.angle += data.speed * 0.015;
-        pPositions[i * 3] = Math.cos(data.angle) * data.radius + mouseX * 0.25;
-        pPositions[i * 3 + 1] = data.height + Math.sin(time + i) * 0.05;
-        pPositions[i * 3 + 2] = Math.sin(data.angle) * data.radius + mouseY * 0.25;
+        data.angle += data.speed * 0.015 * (1.0 + audioIntensity * 3.0);
+        const currentRadius = data.radius + audioIntensity * 0.6;
+        
+        pPositions[i * 3] = Math.cos(data.angle) * currentRadius + mouseX * 0.25;
+        pPositions[i * 3 + 1] = data.height + Math.sin(time + i) * 0.05 * (1.0 + audioIntensity * 4.0);
+        pPositions[i * 3 + 2] = Math.sin(data.angle) * currentRadius + mouseY * 0.25;
       }
       pGeo.attributes.position.needsUpdate = true;
       
@@ -1204,7 +1441,6 @@ const codeAccordion = `{
         const previewElem = document.getElementById(`preview-${targetFile}`);
         if (previewElem) {
           previewElem.style.display = 'block';
-          // Force reflow trigger
           previewElem.offsetHeight;
           previewElem.classList.add('active');
         }
@@ -1221,7 +1457,11 @@ const codeAccordion = `{
   });
 
   document.addEventListener('lens-changed', (e) => {
-    if (e.detail && e.detail.lens === 'frontend') {
+    if (e.detail && e.detail.lens !== 'frontend') {
+      if (typeof window.stopAudioSync === 'function') {
+        window.stopAudioSync();
+      }
+    } else if (e.detail && e.detail.lens === 'frontend') {
       setTimeout(() => {
         initThreePlayground();
         initWorkbenchTabs();
