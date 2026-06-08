@@ -1,0 +1,1544 @@
+---
+// Frontend Lens Astro Component
+---
+
+<!-- Import Three.js CDN Library at the top of the frontend component -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" is:inline></script>
+
+<div class="frontend-lens-root">
+  <!-- Futuristic Mock IDE & Live Preview Workbench -->
+  <section class="workbench-section">
+    <div class="workbench-header">
+      <div class="workbench-dots">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <div class="workbench-title">Edwin_Ily // Frontend Workbench v2.6</div>
+      <div class="workbench-status">● LOCAL_DEV_SERVER_PORT_4321</div>
+    </div>
+
+    <div class="workbench-grid">
+      <!-- Sidebar / File Explorer -->
+      <aside class="workbench-sidebar">
+        <div class="sidebar-header">EXPLORER // SRC</div>
+        <ul class="file-tree">
+          <li class="tree-item active" data-file="hologram">
+            <span class="file-icon hologram">💎</span>
+            <span class="file-name">prism.three</span>
+          </li>
+          <li class="tree-item" data-file="audio">
+            <span class="file-icon audio">🎵</span>
+            <span class="file-name">player.html</span>
+          </li>
+          <li class="tree-item" data-file="lupino">
+            <span class="file-icon lupino">🗺️</span>
+            <span class="file-name">lupino.html</span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Project Information / Control Panel Pane -->
+      <div class="workbench-editor">
+        <div class="editor-tabs">
+          <div class="editor-tab active" id="active-tab-title">prism.three</div>
+        </div>
+        
+        <!-- Info Content Areas (hidden/shown based on selected file) -->
+        <div class="code-viewport" id="code-hologram">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">💎 WEBGL & REAL-TIME AUDIO API</span>
+              <h3>Visor Holográfico Prism</h3>
+            </div>
+            <p class="project-info-desc">
+              Un visor interactivo tridimensional de alto rendimiento que integra gráficos GPU acelerados con Three.js y captura de frecuencias de sonido mediante la Web Audio API. Analiza las vibraciones acústicas del ordenador y las traduce en latidos elásticos, pulsaciones cromáticas y órbitas dinámicas de partículas en tiempo real.
+            </p>
+            
+            <div class="project-info-controls">
+              <div class="control-item">
+                <div class="control-header">
+                  <label for="audio-sensitivity-slider">Sensibilidad del Umbral (Gain)</label>
+                  <span class="control-val" id="val-sensitivity">1.4x</span>
+                </div>
+                <input type="range" id="audio-sensitivity-slider" min="0.5" max="3.0" step="0.1" value="1.4" class="fe-slider" />
+                <span class="slider-helper">Desliza para ajustar la ganancia y adaptar la respuesta de las pulsaciones del cristal a la intensidad del sonido.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-viewport" id="code-audio" style="display:none;">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">🎵 AUDIO VISUALIZER GRAPHICS</span>
+              <h3>Reproductor Glassmorphic</h3>
+            </div>
+            <p class="project-info-desc">
+              Un widget de reproducción de audio digital estructurado con diseño de interfaz translúcida (Glassmorphism). Dispone de un ecualizador de frecuencias de 7 bandas interactivo, el cual simula una reproducción acústica mediante animaciones o interactúa directamente con la Web Audio API cuando el ecualizador real está encendido.
+            </p>
+          </div>
+        </div>
+
+        <div class="code-viewport" id="code-lupino" style="display:none;">
+          <div class="project-info-pane">
+            <div class="project-info-header">
+              <span class="info-badge">🗺️ GEOLOCATION & GASTROMAP</span>
+              <h3>Lupino de Altura</h3>
+            </div>
+            <p class="project-info-desc">
+              Una single-page application diseñada para una ruta turística y gastronómica. Incorpora un mapa interactivo detallado que geolocaliza y describe visualmente todos los puntos de interés, platillos tradicionales y paradas sugeridas propuestos por estudiantes de gastronomía para esta ruta única.
+            </p>
+            <div class="project-info-controls">
+              <a href="https://landingpage-lupino.vercel.app" target="_blank" rel="noopener noreferrer" class="visit-site-btn">
+                <span>Visitar Sitio Web</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow-icon">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Render Preview Pane -->
+      <section class="workbench-preview">
+        <div class="preview-header">LIVE RENDER VIEWPORT</div>
+        
+        <!-- Live content areas mapping to the active files -->
+        
+        <!-- Content 0: 3D Hologram Prism -->
+        <div class="preview-container active" id="preview-hologram">
+          <div class="frontend-3d-viewport" title="Click to pulse the holographic crystal">
+            <div class="threejs-glow-effect"></div>
+            <button id="three-audio-sync-btn" class="three-audio-sync-btn" title="Sincronizar con la música del ordenador">
+              <span class="sync-dot"></span>
+              <span class="sync-text">🎤 Sincronizar Música</span>
+            </button>
+            <canvas id="three-playground-canvas" class="three-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Content 1: Audio Player Sandbox -->
+        <div class="preview-container" id="preview-audio" style="display:none;">
+          <div class="sandbox-inner center-content">
+            <div class="widget-meta">EXPERIMENT #01</div>
+            <h3>Glass Audio Player</h3>
+            <p class="widget-desc">Frosted UI containing dynamic visualizers. Click to simulate active track playback.</p>
+            
+            <div class="audio-player-card">
+              <div class="audio-info">
+                <div class="audio-art">🎵</div>
+                <div class="audio-text">
+                  <span class="track-title">Creative Coding.mp3</span>
+                  <span class="track-artist">Astro Beats Subsystem</span>
+                </div>
+              </div>
+              
+              <!-- Pulsing Audio Bars -->
+              <div class="audio-visualizer" id="visualizer-bars">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+              </div>
+
+              <div class="audio-controls">
+                <button class="play-btn" id="audio-play-toggle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="play-icon">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+                <div class="audio-progress-bar">
+                  <div class="progress-fill" id="audio-progress" style="width: 35%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content 2: Lupino de Altura Live Map Site Preview -->
+        <div class="preview-container" id="preview-lupino" style="display:none;">
+          <div class="sandbox-inner" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="widget-meta">EXPERIMENT #02 // LIVE SITE PREVIEW</div>
+            <iframe src="https://landingpage-lupino.vercel.app" class="lupino-iframe" title="Lupino de Altura Live Site"></iframe>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* -------------------------------------------------------------
+     FRONTEND PERSPECTIVE BASE
+     ------------------------------------------------------------- */
+  .frontend-lens-root {
+    padding: 2rem 2rem 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    box-sizing: border-box;
+    font-family: var(--fe-font-sans);
+  }
+
+  /* Single Column Hero Title Container */
+  .frontend-intro-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  .frontend-3d-viewport {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background: rgba(139, 92, 246, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 30px rgba(139, 92, 246, 0.04);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+
+  .frontend-3d-viewport:hover {
+    border-color: var(--accent-color);
+    box-shadow: inset 0 0 45px rgba(139, 92, 246, 0.08), 0 10px 25px rgba(139, 92, 246, 0.02);
+  }
+
+  .three-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    outline: none;
+    z-index: 2;
+    position: relative;
+  }
+
+  .threejs-glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(192, 132, 252, 0.14) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .prism-overlay-label {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    z-index: 5;
+    pointer-events: none;
+    text-transform: uppercase;
+    background: rgba(6, 3, 13, 0.6);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+
+  /* Audio Sync Glassmorphic Button Overlay */
+  .three-audio-sync-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(6, 3, 13, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--text-color);
+    font-family: var(--fe-font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .three-audio-sync-btn:hover {
+    border-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+  }
+
+  .three-audio-sync-btn.active {
+    border-color: #FF007A;
+    background: rgba(255, 0, 122, 0.15);
+    box-shadow: 0 0 15px rgba(255, 0, 122, 0.4);
+    color: #FFFFFF;
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--text-muted);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+
+  .three-audio-sync-btn.active .sync-dot {
+    background-color: #FF007A;
+    animation: syncDotPulse 1.2s infinite alternate;
+  }
+
+  @keyframes syncDotPulse {
+    0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0 rgba(255, 0, 122, 0); }
+    100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 8px rgba(255, 0, 122, 1); }
+  }
+
+  .fe-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #FFFFFF 30%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .fe-desc {
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-color);
+    max-width: 850px;
+  }
+
+  .highlight-fe {
+    color: var(--accent-color);
+    font-weight: 600;
+  }
+
+  /* -------------------------------------------------------------
+     FUTURISTIC WORKBENCH IDE
+     ------------------------------------------------------------- */
+  .workbench-section {
+    background: rgba(6, 3, 13, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  .workbench-header {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .workbench-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+
+  .dot.red { background: #FF5F56; }
+  .dot.yellow { background: #FFBD2E; }
+  .dot.green { background: #27C93F; }
+
+  .workbench-title {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .workbench-status {
+    color: var(--accent-color);
+    font-weight: 700;
+  }
+
+  .workbench-grid {
+    display: grid;
+    grid-template-columns: 220px 1.1fr 1fr;
+    height: 72vh; /* Responsive height depending on screen size */
+    min-height: 480px;
+    max-height: 850px;
+  }
+
+  /* Workbench Sidebar Explorer */
+  .workbench-sidebar {
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sidebar-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .file-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tree-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+  }
+
+  .tree-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-color);
+  }
+
+  .tree-item.active {
+    background: rgba(139, 92, 246, 0.08);
+    color: #FFFFFF;
+    border-left: 2px solid var(--accent-color);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .file-icon {
+    font-size: 1rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .tree-item:hover .file-icon {
+    transform: scale(1.15);
+  }
+
+  /* Code Editor Pane */
+  .workbench-editor {
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    background: rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .editor-tabs {
+    background: rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+  }
+
+  .editor-tab {
+    padding: 0.75rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-color);
+    border-right: 1px solid var(--border-color);
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .code-viewport {
+    flex: 1;
+    margin: 0;
+    padding: 2rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #C9D1D9;
+    background: transparent;
+  }
+
+  /* Code Syntax Highlighting colors */
+  .code-comment { color: #8B949E; font-style: italic; }
+  .code-keyword { color: #FF7B72; font-weight: bold; }
+  .code-variable { color: #79C0FF; }
+  .code-string { color: #A5D6FF; }
+  .code-number { color: #D2A8FF; }
+  .code-property { color: #7EE787; }
+  .code-function { color: #D2A8FF; }
+
+  /* Live Render Preview Pane */
+  .workbench-preview {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+  }
+
+  .preview-header {
+    background: rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent-color);
+  }
+
+  .preview-container {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto; /* Internal scrolling to avoid main page scrollbar */
+    animation: fadeInPreview 0.4s ease forwards;
+  }
+
+  @keyframes fadeInPreview {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sandbox-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .sandbox-inner.center-content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .sandbox-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .control-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .control-val {
+    color: var(--accent-color);
+  }
+
+  .fe-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    outline: none;
+  }
+
+  .fe-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--accent-color);
+    transition: transform 0.2s ease;
+  }
+
+  .fe-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--user-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-family: var(--fe-font-sans);
+  }
+
+  .reset-btn:hover {
+    border-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.05);
+  }
+
+  /* Mock Card widget styles */
+  .mock-widget {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    transition: border-radius 0.3s ease;
+  }
+
+  .mock-badge {
+    align-self: flex-start;
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--fe-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .mock-widget h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .mock-widget p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .mock-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.6rem;
+    margin-top: 0.4rem;
+  }
+
+  /* Micro interactions widget styles */
+  .widget-meta {
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .widget-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    max-width: 320px;
+  }
+
+  .widget-action-box {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+
+  .magnetic-btn {
+    background: var(--accent-color);
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.6rem;
+    border-radius: var(--user-radius);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    font-family: var(--fe-font-sans);
+  }
+
+  /* Audio player sub-card */
+  .audio-player-card {
+    background: rgba(255,255,255,0.01);
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 320px;
+    text-align: left;
+  }
+
+  .audio-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .audio-art {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .audio-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .track-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  .track-artist {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  /* Dynamic visualizer */
+  .audio-visualizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 20px;
+    padding: 0 8px;
+  }
+
+  .audio-visualizer .bar {
+    width: 3px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 10px;
+    transition: height 0.25s ease;
+  }
+
+  /* Height animations when active */
+  .audio-visualizer.playing .bar {
+    animation: bounceVisualizer 1.2s infinite ease-in-out alternate;
+  }
+
+  .audio-visualizer.playing .bar:nth-child(2) { animation-delay: 0.15s; }
+  .audio-visualizer.playing .bar:nth-child(3) { animation-delay: 0.3s; }
+  .audio-visualizer.playing .bar:nth-child(4) { animation-delay: 0.45s; }
+  .audio-visualizer.playing .bar:nth-child(5) { animation-delay: 0.2s; }
+  .audio-visualizer.playing .bar:nth-child(6) { animation-delay: 0.35s; }
+  .audio-visualizer.playing .bar:nth-child(7) { animation-delay: 0.1s; }
+
+  @keyframes bounceVisualizer {
+    0% { height: 3px; }
+    100% { height: 20px; }
+  }
+
+  .audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .play-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #0A051D;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .play-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .audio-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-color);
+  }
+
+  /* Accordion styling */
+  .accordion-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .accordion-trigger {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: var(--fe-font-sans);
+  }
+
+  .accordion-trigger:hover {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .acc-chevron {
+    font-size: 0.65rem;
+    color: var(--accent-color);
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-item.active .acc-chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0 1rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .accordion-item.active .accordion-panel {
+    max-height: 80px;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .workbench-grid {
+      grid-template-columns: 180px 1fr;
+    }
+    .workbench-editor {
+      display: none; /* Hide code editor on tablets to keep it tidy */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .frontend-intro-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .frontend-3d-viewport {
+      height: 240px;
+    }
+
+    .fe-title {
+      font-size: 2.5rem;
+    }
+    
+    .workbench-grid {
+      grid-template-columns: 1fr;
+    }
+    .workbench-sidebar {
+      border-right: none;
+      border-bottom: 1px solid var(--border-color);
+      flex-direction: row;
+      overflow-x: auto;
+      padding: 0.8rem;
+    }
+    .file-tree {
+      flex-direction: row;
+      gap: 8px;
+    }
+    .tree-item {
+      padding: 0.4rem 0.75rem;
+      white-space: nowrap;
+    }
+  }
+
+  /* Immersive Hologram Preview Panel Adjustments */
+  #preview-hologram {
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #preview-hologram .frontend-3d-viewport {
+    flex: 1; /* Stretch vertically to fit screen height perfectly without overflow */
+    width: 100%;
+    border-radius: var(--user-radius);
+    box-shadow: inset 0 0 45px rgba(139, 92, 246, 0.06), 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Project Information Pane Styles */
+  .project-info-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--text-color);
+  }
+
+  .project-info-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .info-badge {
+    align-self: flex-start;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.05em;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .project-info-pane h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+
+  .project-info-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .project-info-controls {
+    border-top: 1px dashed var(--border-color);
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .slider-helper {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* Lupino de Altura Project Styles */
+  .visit-site-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-color);
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--user-radius);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--fe-font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .visit-site-btn:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4), 0 0 10px rgba(139, 92, 246, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-arrow-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .visit-site-btn:hover .btn-arrow-icon {
+    transform: translate(2px, -2px);
+  }
+
+  .lupino-iframe {
+    width: 100%;
+    flex: 1;
+    min-height: 480px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--user-radius);
+    background: rgba(6, 3, 13, 0.4);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script is:inline>
+  // -------------------------------------------------------------
+  // THREE.JS HOLOGRAPHIC CRYSTAL PRISM VIEWPORT
+  // -------------------------------------------------------------
+  let threeAnimationId = null;
+  let activeRenderer = null; // Save reference to dispose of webgl context
+  let audioCtx = null;
+  let analyser = null;
+  let audioStream = null;
+  let dataArray = null;
+  let isAudioSyncActive = false;
+  window.audioSensitivity = 1.4; // Global sensitivity threshold
+
+  // Real-time audio sync helpers
+  async function startAudioSync(syncBtn) {
+    try {
+      audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 128; // Optimized for performance and 7 visualizer bars
+      analyser.smoothingTimeConstant = 0.55; // Snappier, less laggy response to beats!
+      
+      const source = audioCtx.createMediaStreamSource(audioStream);
+      source.connect(analyser);
+      
+      isAudioSyncActive = true;
+      if (syncBtn) {
+        syncBtn.classList.add('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🔊 Música Activa';
+      }
+
+      // Also dynamically update simulated widget details
+      const trackTitle = document.querySelector('#preview-audio .track-title');
+      const trackArtist = document.querySelector('#preview-audio .track-artist');
+      const audioArt = document.querySelector('#preview-audio .audio-art');
+      if (trackTitle) trackTitle.textContent = 'Mic / System Audio';
+      if (trackArtist) trackArtist.textContent = 'Real-time Music Input';
+      if (audioArt) audioArt.textContent = '🎤';
+    } catch (err) {
+      console.error("Error accessing microphone:", err);
+      alert("Para sincronizar la música con el cristal 3D, activa el acceso al micrófono. Si quieres capturar el sonido del sistema directamente, puedes configurar Stereo Mix / Mezcla Estéreo como tu dispositivo de entrada predeterminado.");
+      isAudioSyncActive = false;
+      if (syncBtn) {
+        syncBtn.classList.remove('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+      }
+    }
+  }
+
+  window.stopAudioSync = function() {
+    isAudioSyncActive = false;
+    if (audioStream) {
+      audioStream.getTracks().forEach(track => track.stop());
+      audioStream = null;
+    }
+    if (audioCtx) {
+      audioCtx.close();
+      audioCtx = null;
+    }
+    analyser = null;
+    dataArray = null;
+
+    const syncBtn = document.getElementById('three-audio-sync-btn');
+    if (syncBtn) {
+      syncBtn.classList.remove('active');
+      const syncText = syncBtn.querySelector('.sync-text');
+      if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+    }
+
+    const visualizerBars = document.getElementById('visualizer-bars');
+    if (visualizerBars) {
+      visualizerBars.classList.remove('playing');
+      const bars = visualizerBars.querySelectorAll('.bar');
+      bars.forEach(bar => {
+        bar.style.height = '';
+        bar.style.animation = '';
+      });
+    }
+
+    const trackTitle = document.querySelector('#preview-audio .track-title');
+    const trackArtist = document.querySelector('#preview-audio .track-artist');
+    const audioArt = document.querySelector('#preview-audio .audio-art');
+    if (trackTitle) trackTitle.textContent = 'Creative Coding.mp3';
+    if (trackArtist) trackArtist.textContent = 'Astro Beats Subsystem';
+    if (audioArt) audioArt.textContent = '🎵';
+  };
+
+  function initThreePlayground() {
+    if (threeAnimationId) {
+      cancelAnimationFrame(threeAnimationId);
+      threeAnimationId = null;
+    }
+    
+    // Dispose of previous renderer to prevent WebGL context leaks
+    if (activeRenderer) {
+      try {
+        activeRenderer.dispose();
+      } catch (e) {
+        console.error("Error disposing renderer:", e);
+      }
+      activeRenderer = null;
+    }
+    
+    const canvas = document.getElementById('three-playground-canvas');
+    if (!canvas || !window.THREE) return;
+    
+    const container = canvas.parentElement;
+    const THREE = window.THREE;
+    
+    // Scene creation
+    const scene = new THREE.Scene();
+    
+    // WebGL Renderer Setup (alpha transparency for seamless look)
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true,
+      antialias: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    activeRenderer = renderer; // Save reference
+    
+    // Camera Setup
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.z = 5.2;
+    
+    // Lights Setup (Ambient + Dual colored point lights)
+    const ambientLight = new THREE.AmbientLight(0x0a051d, 3.0);
+    scene.add(ambientLight);
+    
+    const pointLight1 = new THREE.PointLight(0x8B5CF6, 4.0, 15); // Neon Purple
+    pointLight1.position.set(2.5, 3.0, 2.0);
+    scene.add(pointLight1);
+    
+    const pointLight2 = new THREE.PointLight(0x00E5FF, 3.0, 15); // Cyber Cyan
+    pointLight2.position.set(-2.5, -3.0, 2.0);
+    scene.add(pointLight2);
+    
+    // Geometries
+    // Center faceted Crystal Prism (Octahedron has 8 flat glass faces - highly performant!)
+    const crystalGeo = new THREE.OctahedronGeometry(1.2, 0);
+    const crystalMat = new THREE.MeshPhongMaterial({
+      color: 0x06030c,
+      emissive: 0x110724,
+      specular: 0x8B5CF6,
+      shininess: 90,
+      flatShading: true // Gives a stunning low-poly glass refraction look
+    });
+    const crystalMesh = new THREE.Mesh(crystalGeo, crystalMat);
+    scene.add(crystalMesh);
+    
+    // Double orbital refraction rings (representing light rays)
+    const ringGeo1 = new THREE.TorusGeometry(1.65, 0.012, 8, 48);
+    const ringMat1 = new THREE.MeshBasicMaterial({
+      color: 0x8B5CF6,
+      transparent: true,
+      opacity: 0.4
+    });
+    const ringMesh1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ringMesh1.rotation.x = Math.PI / 2.5;
+    scene.add(ringMesh1);
+
+    const ringGeo2 = new THREE.TorusGeometry(1.8, 0.01, 8, 48);
+    const ringMat2 = new THREE.MeshBasicMaterial({
+      color: 0x00E5FF,
+      transparent: true,
+      opacity: 0.3
+    });
+    const ringMesh2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ringMesh2.rotation.y = Math.PI / 3.0;
+    scene.add(ringMesh2);
+
+    // Subtle Particle Swarm
+    const particleCount = 45;
+    const pGeo = new THREE.BufferGeometry();
+    const pPos = new Float32Array(particleCount * 3);
+    const pData = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 1.45 + Math.random() * 1.0;
+      const speed = 0.2 + Math.random() * 0.4;
+      const height = (Math.random() - 0.5) * 0.8;
+
+      pPos[i * 3] = Math.cos(angle) * radius;
+      pPos[i * 3 + 1] = height;
+      pPos[i * 3 + 2] = Math.sin(angle) * radius;
+
+      pData.push({ angle, radius, speed, height });
+    }
+
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    const pMat = new THREE.PointsMaterial({
+      color: 0xC084FC,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.6
+    });
+    const particles = new THREE.Points(pGeo, pMat);
+    scene.add(particles);
+    
+    // Parallax interaction variables
+    let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0;
+    
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      targetX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      targetY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
+    });
+    
+    // Responsive Resize Observer
+    const resizeObserver = new ResizeObserver(() => {
+      if (container.clientWidth === 0 || container.clientHeight === 0) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+    resizeObserver.observe(container);
+    
+    // Click action: Crystalline kinetic pulse
+    let pulseScale = 1.0;
+    let pulseVelocity = 0.0;
+    
+    container.addEventListener('click', () => {
+      pulseScale = 1.45; // Expand core crystal
+      pointLight1.intensity = 8.0; // Flash lighting
+      pointLight2.intensity = 6.0;
+      
+      // Temporary ring spin speed increase
+      ringMesh1.rotation.z += 1.5;
+      ringMesh2.rotation.z -= 1.5;
+    });
+
+    // Setup Audio Sync Button Event
+    const syncBtn = document.getElementById('three-audio-sync-btn');
+    if (syncBtn) {
+      if (isAudioSyncActive) {
+        syncBtn.classList.add('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🔊 Música Activa';
+      } else {
+        syncBtn.classList.remove('active');
+        const syncText = syncBtn.querySelector('.sync-text');
+        if (syncText) syncText.textContent = '🎤 Sincronizar Música';
+      }
+
+      syncBtn.onclick = async (e) => {
+        e.stopPropagation();
+        if (isAudioSyncActive) {
+          window.stopAudioSync();
+        } else {
+          await startAudioSync(syncBtn);
+        }
+      };
+    }
+
+    // Setup Sensitivity Threshold Slider
+    const sensSlider = document.getElementById('audio-sensitivity-slider');
+    const sensValLabel = document.getElementById('val-sensitivity');
+    if (sensSlider) {
+      sensSlider.value = window.audioSensitivity;
+      if (sensValLabel) sensValLabel.textContent = `${window.audioSensitivity.toFixed(1)}x`;
+
+      sensSlider.oninput = () => {
+        const val = parseFloat(sensSlider.value);
+        window.audioSensitivity = val;
+        if (sensValLabel) sensValLabel.textContent = `${val.toFixed(1)}x`;
+      };
+    }
+    
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      // Clean exit if element is no longer attached or display:none is active
+      if (!document.getElementById('three-playground-canvas') || canvas.offsetParent === null) {
+        threeAnimationId = null;
+        return;
+      }
+      
+      const time = clock.getElapsedTime();
+
+      // Real-time audio analysis values
+      let audioIntensity = 0;
+      let bassIntensity = 0;
+      let trebleIntensity = 0;
+
+      if (isAudioSyncActive && analyser) {
+        const bufferLength = analyser.frequencyBinCount;
+        if (!dataArray || dataArray.length !== bufferLength) {
+          dataArray = new Uint8Array(bufferLength);
+        }
+        analyser.getByteFrequencyData(dataArray);
+
+        let total = 0;
+        let bass = 0;
+        let treble = 0;
+        const bassCount = Math.min(6, bufferLength);
+        const trebleStart = Math.floor(bufferLength * 0.4);
+        const trebleEnd = Math.floor(bufferLength * 0.8);
+
+        for (let i = 0; i < bufferLength; i++) {
+          total += dataArray[i];
+          if (i < bassCount) {
+            bass += dataArray[i];
+          }
+          if (i >= trebleStart && i <= trebleEnd) {
+            treble += dataArray[i];
+          }
+        }
+
+        const avg = total / bufferLength;
+        const avgBass = bass / bassCount;
+        const avgTreble = treble / (trebleEnd - trebleStart + 1);
+
+        // Boost sensitivity dynamically set by the manual slider threshold
+        const sensitivity = window.audioSensitivity; 
+        audioIntensity = Math.min(1.0, (avg / 255.0) * sensitivity);
+        bassIntensity = Math.min(1.0, (avgBass / 255.0) * sensitivity);
+        trebleIntensity = Math.min(1.0, (avgTreble / 255.0) * sensitivity);
+
+        // Update visualizer bars in Workbench preview
+        const visualizerBars = document.getElementById('visualizer-bars');
+        if (visualizerBars) {
+          const bars = visualizerBars.querySelectorAll('.bar');
+          if (bars.length > 0) {
+            if (!visualizerBars.classList.contains('playing')) {
+              visualizerBars.classList.add('playing');
+            }
+            const step = Math.floor(bufferLength / bars.length);
+            for (let b = 0; b < bars.length; b++) {
+              let bandSum = 0;
+              const start = b * step;
+              for (let j = start; j < start + step; j++) {
+                bandSum += dataArray[j];
+              }
+              const stepAvg = bandSum / step;
+              const barHeight = Math.max(3, Math.min(1.0, (stepAvg / 255.0) * sensitivity) * 22);
+              bars[b].style.height = `${barHeight}px`;
+              bars[b].style.animation = 'none';
+            }
+          }
+        }
+      }
+      
+      // Apply spring easing to click kinetic pulse
+      const springTension = 0.15;
+      const springFriction = 0.8;
+      
+      const springForce = (1.0 - pulseScale) * springTension;
+      pulseVelocity += springForce;
+      pulseVelocity *= springFriction;
+      pulseScale += pulseVelocity;
+
+      // Add real-time music pulse scale component
+      const audioScaleBase = 1.0 + bassIntensity * 0.55;
+      const finalCrystalScale = Math.max(pulseScale, audioScaleBase);
+      
+      // Interpolate light intensities nicely incorporating click + music beats
+      const targetLight1 = 4.0 + bassIntensity * 12.0;
+      const targetLight2 = 3.0 + trebleIntensity * 8.0;
+      pointLight1.intensity += (targetLight1 - pointLight1.intensity) * 0.2;
+      pointLight2.intensity += (targetLight2 - pointLight2.intensity) * 0.2;
+      
+      // Apply parallax coordinates
+      mouseX += (targetX - mouseX) * 0.08;
+      mouseY += (targetY - mouseY) * 0.08;
+      
+      // Crystal slow spinning + cursor focus tracking
+      crystalMesh.rotation.y = time * 0.15 + mouseX * 0.4;
+      crystalMesh.rotation.x = time * 0.1 + mouseY * 0.4;
+      crystalMesh.scale.setScalar(finalCrystalScale);
+      
+      // Orbiting rings animation speed up dynamically with audio intensity
+      const ringSpeed1 = 0.3 * (1.0 + audioIntensity * 2.5);
+      const ringSpeed2 = 0.15 * (1.0 + audioIntensity * 2.0);
+      const ringSpeed3 = 0.25 * (1.0 + audioIntensity * 2.5);
+      const ringSpeed4 = 0.2 * (1.0 + audioIntensity * 2.0);
+
+      ringMesh1.rotation.x = (time * ringSpeed1) + mouseX * 0.6;
+      ringMesh1.rotation.y = (-time * ringSpeed2) + mouseY * 0.3;
+      
+      ringMesh2.rotation.y = (-time * ringSpeed3) - mouseX * 0.5;
+      ringMesh2.rotation.z = (time * ringSpeed4) + mouseY * 0.5;
+
+      // Animate particles with expansion + speed up driven by audio
+      const pPositions = pGeo.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        const data = pData[i];
+        data.angle += data.speed * 0.015 * (1.0 + audioIntensity * 3.0);
+        const currentRadius = data.radius + audioIntensity * 0.6;
+        
+        pPositions[i * 3] = Math.cos(data.angle) * currentRadius + mouseX * 0.25;
+        pPositions[i * 3 + 1] = data.height + Math.sin(time + i) * 0.05 * (1.0 + audioIntensity * 4.0);
+        pPositions[i * 3 + 2] = Math.sin(data.angle) * currentRadius + mouseY * 0.25;
+      }
+      pGeo.attributes.position.needsUpdate = true;
+      
+      renderer.render(scene, camera);
+      threeAnimationId = requestAnimationFrame(animate);
+    }
+    
+    animate();
+  }
+
+  // -------------------------------------------------------------
+  // FUTURISTIC IDE INTERACTIVE WORKSPACE ORCHESTRATOR
+  // -------------------------------------------------------------
+  function initWorkbenchTabs() {
+    const treeItems = document.querySelectorAll('.tree-item');
+    const tabTitle = document.getElementById('active-tab-title');
+    
+    const fileCodes = {
+      'hologram': 'prism.three',
+      'audio': 'player.html',
+      'lupino': 'lupino.html'
+    };
+
+    treeItems.forEach(item => {
+      // Guard to prevent multiple bindings to the same items
+      if (item.getAttribute('data-tabs-bound')) return;
+      item.setAttribute('data-tabs-bound', 'true');
+
+      item.addEventListener('click', () => {
+        const targetFile = item.getAttribute('data-file');
+        
+        // Update active sidebar file node
+        treeItems.forEach(t => t.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Update Editor Tab title
+        if (tabTitle) {
+          tabTitle.innerText = fileCodes[targetFile];
+        }
+
+        // Hide all code viewports and preview boxes
+        document.querySelectorAll('.code-viewport').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.preview-container').forEach(p => {
+          p.classList.remove('active');
+          p.style.display = 'none';
+        });
+
+        // Show selected file code
+        const codeElem = document.getElementById(`code-${targetFile}`);
+        if (codeElem) codeElem.style.display = 'block';
+
+        // Show selected render panel
+        const previewElem = document.getElementById(`preview-${targetFile}`);
+        if (previewElem) {
+          previewElem.style.display = 'block';
+          previewElem.offsetHeight; // Force reflow
+          previewElem.classList.add('active');
+        }
+
+        // Auto restart/re-init Three.js when switching back to the hologram tab
+        if (targetFile === 'hologram') {
+          initThreePlayground();
+        }
+      });
+    });
+  }
+
+  // Hook into initial tab load and click switches
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      initThreePlayground();
+      initWorkbenchTabs();
+    }, 100);
+  });
+
+  document.addEventListener('lens-changed', (e) => {
+    if (e.detail && e.detail.lens !== 'frontend') {
+      if (typeof window.stopAudioSync === 'function') {
+        window.stopAudioSync();
+      }
+    } else if (e.detail && e.detail.lens === 'frontend') {
+      setTimeout(() => {
+        // Only initialize Three if hologram (prism.three) is the active tab
+        const hologramTab = document.querySelector('.tree-item[data-file="hologram"]');
+        if (hologramTab && hologramTab.classList.contains('active')) {
+          initThreePlayground();
+        }
+        initWorkbenchTabs();
+      }, 100);
+    }
+  });
+</script>

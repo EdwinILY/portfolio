@@ -1,0 +1,261 @@
+---
+// Navbar Astro Component
+---
+
+<header class="navbar-container">
+  <div class="navbar-inner">
+    <!-- Dynamic Brand Logo -->
+    <a href="#" class="brand-logo" id="brand-logo">
+      <span class="logo-prefix">&lt;</span>
+      <span class="logo-name">Edwin Ily</span>
+      <span class="logo-suffix"> /&gt;</span>
+    </a>
+
+    <!-- Theme Switcher Pill -->
+    <div class="lens-switcher" role="radiogroup" aria-label="Choose Portfolio Perspective">
+      <div class="active-pill-bg" id="active-pill-bg"></div>
+      
+      <button 
+        class="lens-btn" 
+        data-lens="backend" 
+        role="radio" 
+        aria-checked="false" 
+        title="Backend Lens (Core Architecture)"
+      >
+        <!-- Custom Terminal Bracket SVG Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+          <line x1="12" y1="4" x2="12" y2="20"></line>
+        </svg>
+        <span class="btn-text">BACKEND</span>
+      </button>
+
+      <button 
+        class="lens-btn" 
+        data-lens="frontend" 
+        role="radio" 
+        aria-checked="false" 
+        title="Frontend Lens (Visual Playground)"
+      >
+        <!-- Custom Interface Sparkle SVG Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+          <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+          <line x1="12" y1="22" x2="12" y2="12"></line>
+          <line x1="12" y1="12" x2="22" y2="8.5"></line>
+          <line x1="12" y1="12" x2="2" y2="8.5"></line>
+          <polyline points="22 15.5 12 12 2 15.5"></polyline>
+        </svg>
+        <span class="btn-text">FRONTEND</span>
+      </button>
+
+      <button 
+        class="lens-btn active" 
+        data-lens="systems" 
+        role="radio" 
+        aria-checked="true" 
+        title="Perfil Profesional, Proyectos Completos & CV"
+      >
+        <!-- Custom Layers/Server SVG Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span class="btn-text">PERFIL</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* -------------------------------------------------------------
+     NAVBAR WRAPPER & LAYOUT
+     ------------------------------------------------------------- */
+  .navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: center;
+    pointer-events: none; /* Let background mouse moves register, but inner elements handle pointer */
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .navbar-inner {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  /* -------------------------------------------------------------
+     DYNAMIC BRAND LOGO
+     ------------------------------------------------------------- */
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    letter-spacing: -0.03em;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .logo-prefix, .logo-suffix {
+    color: var(--accent-color);
+    font-weight: 500;
+    transition: all 0.5s ease;
+  }
+
+  /* -------------------------
+     Logo styling by Theme
+     ------------------------- */
+  /* FRONTEND MODE */
+  html[data-theme="frontend"] .brand-logo {
+    text-shadow: 0 0 20px rgba(255, 0, 122, 0.3);
+  }
+
+  /* BACKEND MODE */
+  html[data-theme="backend"] .brand-logo {
+    font-family: var(--be-font-mono);
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  /* DESIGN MODE */
+  html[data-theme="design"] .brand-logo {
+    font-family: var(--gd-font-serif);
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+  html[data-theme="design"] .logo-prefix, 
+  html[data-theme="design"] .logo-suffix {
+    display: none; /* Hide HTML brackets in elegant editorial mode */
+  }
+
+  /* -------------------------------------------------------------
+     TRI-LENS SWITCHER PILL
+     ------------------------------------------------------------- */
+  .lens-switcher {
+    position: relative;
+    display: flex;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    border-radius: 40px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Dynamic Sliding Active Indicator */
+  .active-pill-bg {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: 105px; /* Fits text + icon nicely */
+    background: var(--accent-color);
+    border-radius: 30px;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Switcher button formatting */
+  .lens-btn {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    width: 105px;
+    justify-content: center;
+  }
+
+  .lens-btn:hover {
+    color: var(--text-color);
+  }
+
+  .lens-btn.active {
+    color: #FFFFFF !important; /* Always readable on active solid primary bg */
+  }
+
+  /* Special color overrides for active text depending on active theme */
+  
+  html[data-theme="backend"] .lens-btn.active {
+    color: #06090F !important; /* Dark text on neon green terminal badge */
+  }
+
+  html[data-theme="systems"] .lens-btn.active {
+    color: #FFFFFF !important; /* White text on systems blue badge */
+  }
+
+  /* Custom icons within buttons */
+  .btn-icon {
+    flex-shrink: 0;
+    transition: transform 0.4s ease;
+  }
+
+  .lens-btn:hover .btn-icon {
+    transform: scale(1.1);
+  }
+
+  /* Responsive visibility */
+  @media (max-width: 600px) {
+    .navbar-container {
+      padding: 1rem;
+    }
+    
+    .navbar-inner {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .brand-logo {
+      font-size: 1.1rem;
+    }
+    
+    .lens-switcher {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .lens-btn {
+      flex: 1;
+      width: auto;
+      font-size: 0.85rem;
+      padding: 0.6rem 0.5rem;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .active-pill-bg {
+      width: calc((100% - 8px) / 3);
+    }
+  }
+</style>
