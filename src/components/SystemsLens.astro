@@ -1,28 +1,5 @@
 ---
 // Systems & Fullstack Perspective Astro Component
-
-// Generate dynamic, realistic GitHub contribution data for 196 days (28 weeks)
-const contributions = Array(196).fill(0).map((_, i) => {
-  const intensities = ['empty', 'low', 'medium', 'high', 'highest'];
-  const randVal = Math.random();
-  const intensity = randVal < 0.5 ? 'empty' : randVal < 0.75 ? 'low' : randVal < 0.90 ? 'medium' : randVal < 0.97 ? 'high' : 'highest';
-  
-  const date = new Date();
-  date.setDate(date.getDate() - (195 - i));
-  const dateString = date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' });
-  
-  const commitCount = intensity === 'empty' ? 0 
-                     : intensity === 'low' ? Math.floor(1 + Math.random() * 2) 
-                     : intensity === 'medium' ? Math.floor(3 + Math.random() * 4) 
-                     : intensity === 'high' ? Math.floor(7 + Math.random() * 5) 
-                     : Math.floor(12 + Math.random() * 8);
-
-  return {
-    intensity,
-    dateString,
-    commitCount
-  };
-});
 ---
 
 <div class="systems-lens-root">
@@ -81,64 +58,105 @@ const contributions = Array(196).fill(0).map((_, i) => {
   <div class="systems-content-wrapper" id="devops-dashboard-wrapper">
     <!-- Top Section: Dynamic DevOps Status Dashboard & Bio -->
     <section class="devops-control-section">
-    <div class="meta-label">⚡ LIVE DEVOPS OPERATIONS CENTER</div>
-    <h1 class="sys-title">Systems Profile // EdwinILY</h1>
+    <div class="meta-label">⚡ DOSSIER DE INGENIERÍA DE SOFTWARE</div>
+    <h1 class="sys-title">Perfil Profesional // Edwin López</h1>
 
     <!-- 1-Column Dashboard Centerpiece -->
     <div class="ops-dashboard-grid">
-      <!-- Column 1: GitHub Card & Real Bio -->
+      <!-- Column 1: Professional Profile & Bio -->
       <div class="ops-card bio-profile-card">
         <div class="card-glow-overlay"></div>
-        <div class="profile-user-info">
+        
+        <!-- Header Section: Avatar, Name & Professional Title -->
+        <div class="profile-header-block">
           <div class="avatar-container">
-            <img src="/avatar.png" alt="Edwin Lopez Avatar" class="profile-avatar" />
-            <span class="user-status-dot" title="Active on UTA Cluster"></span>
+            <img src="/avatar.png" alt="Edwin López Avatar" class="profile-avatar" />
+            <span class="user-status-dot" title="Disponible para Proyectos"></span>
           </div>
-          <div class="user-details">
+          <div class="user-main-info">
             <h2 class="user-name">Edwin López</h2>
-            <div class="user-handle">@EdwinILY</div>
+            <div class="user-subtitle">Estudiante de Ingeniería de Software & Desarrollador Full-Stack</div>
             <p class="user-bio">
-              Soy Edwin López, estudiante de ingeniería en software en la UTA 🤙. Diseñando arquitecturas microservicios, bases de datos y sistemas interactivos fluidos.
+              Estudiante avanzado de Ingeniería de Software en la Universidad Técnica de Ambato (UTA). Especializado en la conceptualización, diseño y despliegue de soluciones backend robustas, optimización de esquemas de bases de datos relacionales y no relacionales, y maquetación de interfaces web fluidas y adaptativas. Comprometido con la implementación de buenas prácticas de diseño, patrones de arquitectura de software y la entrega de código limpio, mantenible y eficiente.
             </p>
-            <div class="user-meta-stats">
-              <span class="meta-stat">📍 Ecuador</span>
-              <span class="meta-stat">👥 3 followers</span>
-              <span class="meta-stat">👤 1 following</span>
-            </div>
-            <div class="user-tags">
-              <span class="profile-tag">Software Engineering</span>
-              <span class="profile-tag">UTA</span>
-              <span class="profile-tag">Fullstack</span>
-            </div>
           </div>
         </div>
 
-        <!-- Heatmap contributions box -->
-        <div class="github-contributions-box">
-          <div class="contrib-header">
-            <span class="contrib-title">1,412 commits in the last 6 months</span>
-            <div class="contrib-legend">
-              <span>Less</span>
-              <span class="legend-cell empty"></span>
-              <span class="legend-cell low"></span>
-              <span class="legend-cell medium"></span>
-              <span class="legend-cell high"></span>
-              <span class="legend-cell highest"></span>
-              <span>More</span>
+        <!-- 3-Column Dossier Grid (Fully Visible) -->
+        <div class="dossier-columns-grid">
+          <!-- Column 1: Información & Enlaces -->
+          <div class="dossier-column-card">
+            <div class="column-header">
+              <span class="column-bullet"></span>
+              <h3>INFORMACIÓN GENERAL</h3>
+            </div>
+            <div class="column-content">
+              <div class="dossier-meta-item">
+                <span class="meta-label">📍 Ubicación:</span>
+                <span class="meta-value">Ambato, Ecuador</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="meta-label">🎓 Academia:</span>
+                <span class="meta-value">Univ. Técnica de Ambato</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="meta-label">💼 Enfoque:</span>
+                <span class="meta-value">Backend & Sistemas</span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="meta-label">🔗 LinkedIn:</span>
+                <span class="meta-value"><a href="https://linkedin.com/in/edwinily" target="_blank" rel="noopener noreferrer" class="dossier-link">in/edwinily ↗</a></span>
+              </div>
+              <div class="dossier-meta-item">
+                <span class="meta-label">🐙 GitHub:</span>
+                <span class="meta-value"><a href="https://github.com/EdwinILY" target="_blank" rel="noopener noreferrer" class="dossier-link">github.com/EdwinILY ↗</a></span>
+              </div>
             </div>
           </div>
 
-          <div class="github-commit-grid">
-            {contributions.map((day) => (
-              <div 
-                class={`commit-cell ${day.intensity}`} 
-                data-date={day.dateString} 
-                data-commits={day.commitCount}
-                title={`${day.commitCount} commits el ${day.dateString}`}
-              ></div>
-            ))}
+          <!-- Column 2: Backend & Base de Datos -->
+          <div class="dossier-column-card">
+            <div class="column-header">
+              <span class="column-bullet"></span>
+              <h3>BACKEND & DATOS</h3>
+            </div>
+            <div class="column-content">
+              <div class="skills-pill-group">
+                <span class="skill-badge">Java (JDK 17)</span>
+                <span class="skill-badge">Node.js (Express)</span>
+                <span class="skill-badge">PHP</span>
+                <span class="skill-badge">PostgreSQL</span>
+                <span class="skill-badge">MongoDB</span>
+                <span class="skill-badge">Arquitectura MVC</span>
+                <span class="skill-badge">Patrón DAO</span>
+                <span class="skill-badge">APIs RESTful</span>
+                <span class="skill-badge">Consultas Relacionales</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 3: Frontend & DevOps -->
+          <div class="dossier-column-card">
+            <div class="column-header">
+              <span class="column-bullet"></span>
+              <h3>FRONTEND & HERRAMIENTAS</h3>
+            </div>
+            <div class="column-content">
+              <div class="skills-pill-group">
+                <span class="skill-badge">Astro 6</span>
+                <span class="skill-badge">JavaScript (ES6+)</span>
+                <span class="skill-badge">TailwindCSS</span>
+                <span class="skill-badge">HTML5 / CSS3</span>
+                <span class="skill-badge">Docker Containers</span>
+                <span class="skill-badge">Git & GitHub</span>
+                <span class="skill-badge">GitHub Actions</span>
+                <span class="skill-badge">Linux / Shell Bash</span>
+                <span class="skill-badge">Clean Code / SOLID</span>
+              </div>
+            </div>
           </div>
         </div>
+        
       </div>
     </div>
   </section>
@@ -1017,68 +1035,162 @@ const contributions = Array(196).fill(0).map((_, i) => {
     color: #FFFFFF;
   }
 
-  /* GitHub Heatmap styling */
-  .github-contributions-box {
-    margin-top: 1.8rem;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 1.25rem;
+  /* Professional Profile Layout */
+  .profile-layout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
     position: relative;
     z-index: 2;
   }
 
-  .contrib-header {
+  .profile-header-block {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-bottom: 0.8rem;
+    gap: 2rem;
+    align-items: flex-start;
   }
 
-  .contrib-legend {
+  .user-main-info {
     display: flex;
-    align-items: center;
-    gap: 4px;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .legend-cell {
-    width: 9px;
-    height: 9px;
-    border-radius: 1.5px;
+  .user-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .github-commit-grid {
+  /* 3-Column Dossier Grid */
+  .dossier-columns-grid {
     display: grid;
-    grid-template-rows: repeat(7, 9px);
-    grid-auto-flow: column;
-    gap: 3.5px;
-    justify-content: start;
-    overflow-x: auto;
-    max-width: 100%;
-    padding-bottom: 0.35rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
   }
 
-  .commit-cell {
-    width: 9px;
-    height: 9px;
-    border-radius: 1.5px;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
-    cursor: pointer;
+  .dossier-column-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: border-color 0.3s ease;
   }
 
-  .commit-cell:hover {
-    transform: scale(1.5);
-    z-index: 10;
+  .dossier-column-card:hover {
+    border-color: rgba(0, 136, 255, 0.4);
   }
 
-  .commit-cell.empty, .legend-cell.empty { background: rgba(255, 255, 255, 0.05); }
-  .commit-cell.low, .legend-cell.low { background: #1e1b4b; }
-  .commit-cell.medium, .legend-cell.medium { background: #4338ca; }
-  .commit-cell.high, .legend-cell.high { background: #8b5cf6; }
-  .commit-cell.highest, .legend-cell.highest { background: #00f5a0; }
+  .column-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.6rem;
+  }
+
+  .column-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    box-shadow: 0 0 6px var(--accent-color);
+  }
+
+  .column-header h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .column-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .dossier-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.85rem;
+  }
+
+  .meta-label {
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+
+  .meta-value {
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+
+  .dossier-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .dossier-link:hover {
+    color: #FFFFFF;
+    text-shadow: 0 0 8px var(--accent-color);
+  }
+
+  .skills-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .skill-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 0.25rem 0.55rem;
+    border-radius: 4px;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+  }
+
+  .skill-badge:hover {
+    border-color: var(--accent-color);
+    color: #FFFFFF;
+    background: rgba(0, 136, 255, 0.03);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 992px) {
+    .dossier-columns-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-header-block {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .dossier-columns-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 
   /* Topology Net Card styles */
   .topology-header {
@@ -1655,7 +1767,7 @@ const contributions = Array(196).fill(0).map((_, i) => {
       font-size: 2.5rem;
     }
 
-    .github-profile-card {
+    .bio-profile-card {
       padding: 1.5rem;
     }
 
@@ -1712,6 +1824,8 @@ const contributions = Array(196).fill(0).map((_, i) => {
       });
     });
   }
+
+  // (Profile Dossier Tabs Controller removed since layout is fully visible)
 
   // -------------------------------------------------------------
   // SECURE SHELL (SSH) COMMAND HANDLER
